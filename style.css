@@ -196,7 +196,7 @@ body {
 #hero {
   display: flex;
   justify-content: center;
-  padding: 60px 20px 50px;
+  padding: 90px 20px 80px;
   backdrop-filter: blur(3px);
 }
 
