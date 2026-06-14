@@ -96,6 +96,47 @@ function createMediaElement(project) {
   return '';
 }
 
+async function loadSkills() {
+  try {
+    const response = await fetch('skills.json');
+    const skills = await response.json();
+
+    generateSkills(skills);
+    return Promise.resolve();
+  } catch (error) {
+    console.error('Error loading skills:', error);
+    return Promise.reject(error);
+  }
+}
+
+function generateSkills(skills) {
+  const skillsGrid = document.querySelector('.skills-grid');
+  if (!skillsGrid) return;
+
+  skillsGrid.innerHTML = '';
+
+  skills.forEach(skill => {
+    const card = document.createElement('div');
+    card.className = 'skill-card';
+    card.id = skill.id;
+    card.setAttribute('style', skill.backgroundStyle || '');
+
+    const logoHtml = skill.logoHtml || '<div class="skill-logo-placeholder" aria-hidden="true"></div>';
+
+    card.innerHTML = `
+      <div class="skill-logo">
+        ${logoHtml}
+      </div>
+      <div class="skill-info">
+        <h5><span class="text-${skill.highlightColor}">${skill.titleHighlight}</span> ${skill.title.replace(skill.titleHighlight, '')}</h5>
+        <p>${skill.description}</p>
+      </div>
+    `;
+
+    skillsGrid.appendChild(card);
+  });
+}
+
 function initializeSwipeHint() {
   const container = document.getElementById('projectCarouselContainer');
   const hint = document.getElementById('swipeHint');
@@ -119,7 +160,11 @@ function initializeSwipeHint() {
 
 //start here (as DOM loads)
 document.addEventListener('DOMContentLoaded', () => {
-  loadProjects().then(() => {
-    initializeSwipeHint();
-  });
+  Promise.all([loadProjects(), loadSkills()])
+    .then(() => {
+      initializeSwipeHint();
+    })
+    .catch(error => {
+      console.error('Error initializing page content:', error);
+    });
 });
