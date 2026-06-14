@@ -117,6 +117,7 @@ function initializeSwipeHint() {
   });
 }
 
+//start here (as DOM loads)
 document.addEventListener('DOMContentLoaded', () => {
   loadProjects().then(() => {
     initializeSwipeHint();
