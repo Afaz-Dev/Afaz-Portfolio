@@ -491,33 +491,35 @@ body {
    ======================================== */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  /* make panels smaller by lowering the min width */
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   width: 100%;
-  padding: 20px;
-  gap: 15px;
+  padding: 12px;
+  gap: 12px;
 }
 
 .skill-card {
-  padding: 20px 25px;
-  border-radius: 10px;
+  padding: 12px 14px;
+  border-radius: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
   text-align: left;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-height: /*100px;*/ auto;
+  transition: transform 0.25s cubic-bezier(.2,.9,.2,1), box-shadow 0.25s ease;
+  min-height: 56px;
+  overflow: visible;
 }
 
 .skill-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 20px rgba(36, 99, 235, 0.3);
+  box-shadow: 0 6px 22px rgba(36, 99, 235, 0.18);
 }
 
 
 .skill-logo {
-  width: 60px;
-  height: 60px;
+  width: 42px;
+  height: 42px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -548,22 +550,50 @@ body {
 
 .skill-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  /* overlay title + description to enable crossfade tween */
+  position: relative;
+  display: block;
+  min-height: 20px;
+  height: auto;
 }
 
+/* title stays in flow to keep card heights stable */
 .skill-card h5 {
   color: rgba(255, 255, 255, 1);
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   margin: 0;
+  transition: opacity 220ms cubic-bezier(.2,.9,.2,1), transform 220ms cubic-bezier(.2,.9,.2,1);
+  opacity: 1;
+  transform: translateY(0);
 }
 
+/* description is absolutely positioned on top of title and hidden initially */
 .skill-card p {
   color: rgba(206, 206, 206, 1);
   font-size: 13px;
   margin: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 260ms cubic-bezier(.2,.9,.2,1), transform 260ms cubic-bezier(.2,.9,.2,1);
+  pointer-events: none;
+}
+
+/* on hover swap title -> description with smooth tween */
+.skill-card:hover h5,
+.skill-card:focus-within h5 {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.skill-card:hover p,
+.skill-card:focus-within p {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ========================================
